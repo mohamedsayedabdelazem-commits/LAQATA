@@ -10,16 +10,16 @@
       --primary: #7030ef;
       --primary-hover: #5b21cf;
 
-      /* PERMANENT DARK THEME */
-      --bg: #06070a;
-      --bg-light: #0d0f14;
+      /* PERMANENT HIGH-CONTRAST DARK THEME */
+      --bg: #030406;
+      --bg-light: #090b0f;
       --text: #f3f4f6;
       --text-dim: #9ca3af;
-      --text-faint: #374151;
+      --text-faint: #262c36;
       --surface: rgba(255, 255, 255, 0.02);
       --surface2: rgba(255, 255, 255, 0.01);
-      --border: rgba(255, 255, 255, 0.06);
-      --border-hi: rgba(112, 48, 239, 0.25);
+      --border: rgba(255, 255, 255, 0.05);
+      --border-hi: rgba(112, 48, 239, 0.3);
       
       --r-card: 20px;
       --r-sm: 12px;
@@ -44,31 +44,34 @@
       direction: rtl;
     }
 
-    /* PREMIUM COLOURED AURORA GLOW EFFECTS */
+    /* CLEARER, HIGH OPACITY PURPLE TRANSLUCENT GLOW SYSTEM */
     .aurora-bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      overflow: hidden; filter: blur(140px); opacity: 0.45;
+      overflow: hidden; 
+      filter: blur(100px); 
+      opacity: 0.65;        
       mix-blend-mode: screen;
     }
     .aurora-blob {
-      position: absolute; width: 60vw; height: 60vw;
-      border-radius: 50%; background: radial-gradient(circle, rgba(112,48,239,0.7) 0%, rgba(33,13,71,0) 70%);
-      animation: float 22s infinite alternate ease-in-out;
+      position: absolute; width: 55vw; height: 55vw;
+      border-radius: 50%; 
+      background: radial-gradient(circle, rgba(112, 48, 239, 0.75) 0%, rgba(112, 48, 239, 0.2) 50%, rgba(0,0,0,0) 70%);
+      animation: float 20s infinite alternate ease-in-out;
     }
-    .blob-1 { top: -20%; right: -10%; animation-duration: 26s; }
-    .blob-2 { bottom: -20%; left: -15%; background: radial-gradient(circle, rgba(147,51,234,0.5) 0%, rgba(0,0,0,0) 65%); animation-duration: 18s; animation-delay: -5s; }
+    .blob-1 { top: -15%; right: -5%; animation-duration: 24s; }
+    .blob-2 { bottom: -15%; left: -10%; background: radial-gradient(circle, rgba(147, 51, 234, 0.55) 0%, rgba(147, 51, 234, 0.15) 50%, rgba(0,0,0,0) 70%); animation-duration: 16s; animation-delay: -4s; }
 
     @keyframes float {
       0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-      50% { transform: translate(6%, -4%) scale(1.1) rotate(120deg); }
-      100% { transform: translate(-4%, 8%) scale(0.9) rotate(240deg); }
+      50% { transform: translate(5%, -3%) scale(1.08) rotate(90deg); }
+      100% { transform: translate(-3%, 5%) scale(0.95) rotate(180deg); }
     }
 
     .tech-grid {
       position: fixed; inset: 0; z-index: 1; pointer-events: none;
       background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
       background-size: 100px 100px;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     header, section, footer { position: relative; z-index: 2; }
@@ -77,10 +80,10 @@
     header {
       position: fixed; inset: 0 0 auto 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 40px; background: rgba(13, 15, 20, 0.6);
+      padding: 18px 40px; background: rgba(6, 7, 10, 0.45);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(20px) saturate(1.2);
-      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
     }
 
     .logo-container { display: flex; flex-direction: column; }
@@ -90,12 +93,13 @@
 
     .avail-pill {
       display: flex; align-items: center; gap: 8px;
-      background: var(--surface); border: 1px solid var(--border);
+      background: rgba(6, 7, 10, 0.6); border: 1px solid var(--border);
       border-radius: var(--r-pill); padding: 8px 16px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     }
     .avail-dot {
       width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
-      box-shadow: 0 0 10px var(--primary); animation: blink 2s ease-in-out infinite;
+      box-shadow: 0 0 12px var(--primary); animation: blink 2s ease-in-out infinite;
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
     .avail-text { font-size: 11px; color: var(--text-dim); font-weight: 600; }
@@ -116,7 +120,7 @@
       font-size: clamp(32px, 5.5vw, 64px); font-weight: 700; line-height: 1.35; margin-bottom: 24px;
     }
     .hero-title br { display: block; }
-    .highlight { color: var(--primary); }
+    .highlight { color: var(--primary); text-shadow: 0 0 20px rgba(112, 48, 239, 0.2); }
     
     .hero-desc {
       font-size: clamp(15px, 2vw, 18px); color: var(--text-dim); line-height: 1.65; max-width: 640px; margin-bottom: 36px;
@@ -127,12 +131,12 @@
       background: var(--primary); color: #ffffff; padding: 16px 32px;
       border-radius: var(--r-sm); font-weight: 600; text-decoration: none;
       font-size: 15px; transition: var(--transition);
-      box-shadow: 0 8px 24px rgba(112, 48, 239, 0.25);
+      box-shadow: 0 8px 24px rgba(112, 48, 239, 0.35);
       cursor: pointer;
     }
     .hero-cta:hover {
       background: var(--primary-hover); transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(112, 48, 239, 0.4);
+      box-shadow: 0 12px 30px rgba(112, 48, 239, 0.5);
     }
 
     /* ── WORK SECTIONS ── */
@@ -144,19 +148,19 @@
     .work-title { font-size: clamp(24px, 3vw, 36px); font-weight: 700; }
     .work-hint { font-size: 13px; color: var(--text-dim); }
 
-    /* Layout Grids */
     .col-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
     .col-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
     
     .s-col { display: flex; flex-direction: column; gap: 16px; }
 
     .col-card {
-      background: var(--bg-light); border-radius: var(--r-card); overflow: hidden;
+      background: rgba(9, 11, 15, 0.75); border-radius: var(--r-card); overflow: hidden;
       border: 1px solid var(--border); transition: var(--transition); position: relative;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     }
     .col-card:hover {
       transform: translateY(-8px); border-color: var(--border-hi);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
     }
 
     .reel { position: relative; width: 100%; background: #000; overflow: hidden; }
@@ -176,7 +180,7 @@
 
     .reel-badge {
       position: absolute; bottom: 16px; left: 16px;
-      background: rgba(13, 15, 20, 0.85); backdrop-filter: blur(12px);
+      background: rgba(6, 7, 10, 0.85); backdrop-filter: blur(12px);
       border: 1px solid var(--border-hi); border-radius: 8px;
       padding: 6px 12px; font-size: 11px; font-weight: 600; color: #ffffff;
     }
@@ -190,28 +194,32 @@
     /* ── ABOUT ── */
     .about-section { padding: 60px 40px 120px; }
     .about-card {
-      background: var(--bg-light); border-radius: var(--r-card); padding: 54px;
+      background: rgba(9, 11, 15, 0.75); border-radius: var(--r-card); padding: 54px;
       border: 1px solid var(--border); max-width: 740px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     }
     .about-ttl { font-size: clamp(24px, 4vw, 36px); font-weight: 700; margin-bottom: 20px; }
     .about-body { font-size: 15px; color: var(--text-dim); line-height: 1.75; }
 
     /* ── FOOTER ── */
     #contact-target {
-      background: var(--bg-light); border-top: 1px solid var(--border);
+      background: rgba(9, 11, 15, 0.85); border-top: 1px solid var(--border);
       padding: 54px 40px; display: flex; flex-direction: column; gap: 36px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     }
-    .footer-top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
     .footer-brand { font-size: 28px; font-weight: 700; }
     
-    .soc-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    /* Perfect Square Icon Base Layout */
+    .soc-links { display: flex; gap: 16px; flex-wrap: wrap; }
     .soc-link {
-      display: flex; align-items: center; gap: 8px; text-decoration: none;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 11px 20px; font-size: 13px;
-      font-weight: 500; color: var(--text); transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; background: var(--surface); border: 1px solid var(--border);
+      width: 52px; height: 52px; border-radius: var(--r-sm); transition: var(--transition);
     }
-    .soc-link:hover { transform: translateY(-2px); border-color: var(--primary); background: var(--surface2); }
+    .soc-link svg { width: 22px; height: 22px; fill: var(--text-dim); transition: var(--transition); }
+    .soc-link:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(112, 48, 239, 0.08); }
+    .soc-link:hover svg { fill: var(--text); filter: drop-shadow(0 0 8px var(--primary)); }
 
     .copyright {
       font-size: 12px; color: var(--text-faint); border-top: 1px solid var(--border);
@@ -229,14 +237,13 @@
       .hero { padding: 110px 20px 40px; }
       .work-section { padding: 40px 20px; }
       
-      /* Mobile Layout System Specific Changes */
-      .col-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; } /* 2 side-by-side on mobile */
-      .col-grid-2 { grid-template-columns: 1fr; gap: 32px; }             /* 1 stacked single video on mobile */
+      .col-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .col-grid-2 { grid-template-columns: 1fr; gap: 32px; }
       
       .about-section { padding: 40px 20px 60px; }
       .about-card { padding: 28px; }
       #contact-target { padding: 36px 20px; }
-      .footer-top { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .footer-top { flex-direction: column; align-items: center; gap: 24px; }
     }
   </style>
 </head>
@@ -270,7 +277,7 @@
   </div>
 </section>
 
-<!-- ── SECTION 1: SHORTS & REELS FORMATS (4 Vertical Cards - 2x2 on Mobile) ── -->
+<!-- ── SECTION 1: SHORTS & REELS FORMATS ── -->
 <section class="work-section">
   <div class="work-head">
     <div>
@@ -346,7 +353,7 @@
   </div>
 </section>
 
-<!-- ── SECTION 2: YOUTUBE & LONG FORMATS (2 Wide Cards - Stacked 1 by 1 on Mobile) ── -->
+<!-- ── SECTION 2: YOUTUBE & LONG FORMATS ── -->
 <section class="work-section" style="padding-top: 10px;">
   <div class="work-head">
     <div>
@@ -362,7 +369,7 @@
         <div class="reel landscape">
           <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
           <div class="reel-ph"><div class="wave-line"></div></div>
-          <div class="reel-badge" id="badge-5">Long Form Edits</div>
+          <div class="reel-badge" id="badge-6">Long Form Edits</div>
         </div>
       </div>
       <div class="col-info">
@@ -378,7 +385,7 @@
         <div class="reel landscape">
           <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
           <div class="reel-ph"><div class="wave-line"></div></div>
-          <div class="reel-badge" id="badge-6">Showcases</div>
+          <div class="reel-badge" id="badge-7">Showcases</div>
         </div>
       </div>
       <div class="col-info">
@@ -405,9 +412,33 @@
       <div class="footer-brand">LAQTA</div>
     </div>
     <div class="soc-links">
-      <a class="soc-link" href="https://wa.me/qr/DVSQSDESCFPTO1" target="_blank">WhatsApp</a>
-      <a class="soc-link" href="https://instagram.com/YOUR_USERNAME" target="_blank">Instagram</a>
-      <a class="soc-link" href="https://www.facebook.com/share/1FtTA3y2CA/" target="_blank">Facebook</a>
+      <!-- WhatsApp Icon -->
+      <a class="soc-link" href="https://wa.me/qr/DVSQSDESCFPTO1" target="_blank" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </a>
+
+      <!-- Instagram Icon -->
+      <a class="soc-link" href="https://instagram.com/YOUR_USERNAME" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      </a>
+
+      <!-- Facebook Icon -->
+      <a class="soc-link" href="https://www.facebook.com/share/1FtTA3y2CA/" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      </a>
+
+      <!-- X / Twitter Icon -->
+      <a class="soc-link" href="https://x.com/YOUR_USERNAME" target="_blank" aria-label="X (Twitter)">
+        <svg viewBox="0 0 24 24">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
     </div>
   </div>
   <div class="copyright">© 2026 · LAQTA · All Rights Reserved</div>
