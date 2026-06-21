@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LAQTA — Video Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #7030ef;
+      --primary-hover: #5b21cf;
+
+      /* PERMANENT DARK THEME */
+      --bg: #06070a;
+      --bg-light: #0d0f14;
+      --text: #f3f4f6;
+      --text-dim: #9ca3af;
+      --text-faint: #374151;
+      --surface: rgba(255, 255, 255, 0.02);
+      --surface2: rgba(255, 255, 255, 0.01);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hi: rgba(112, 48, 239, 0.25);
+      
+      --r-card: 20px;
+      --r-sm: 12px;
+      --r-pill: 100px;
+      --gap: 20px;
+      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body.rtl {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+    }
+
+    /* PREMIUM COLOURED AURORA GLOW EFFECTS */
+    .aurora-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden; filter: blur(140px); opacity: 0.45;
+      mix-blend-mode: screen;
+    }
+    .aurora-blob {
+      position: absolute; width: 60vw; height: 60vw;
+      border-radius: 50%; background: radial-gradient(circle, rgba(112,48,239,0.7) 0%, rgba(33,13,71,0) 70%);
+      animation: float 22s infinite alternate ease-in-out;
+    }
+    .blob-1 { top: -20%; right: -10%; animation-duration: 26s; }
+    .blob-2 { bottom: -20%; left: -15%; background: radial-gradient(circle, rgba(147,51,234,0.5) 0%, rgba(0,0,0,0) 65%); animation-duration: 18s; animation-delay: -5s; }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate(6%, -4%) scale(1.1) rotate(120deg); }
+      100% { transform: translate(-4%, 8%) scale(0.9) rotate(240deg); }
+    }
+
+    .tech-grid {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 100px 100px;
+      opacity: 0.6;
+    }
+
+    header, section, footer { position: relative; z-index: 2; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; inset: 0 0 auto 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px; background: rgba(13, 15, 20, 0.6);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    }
+
+    .logo-container { display: flex; flex-direction: column; }
+    .logo-name { font-size: 24px; font-weight: 700; letter-spacing: 2px; line-height: 1; }
+    body.rtl .logo-name { letter-spacing: 0; }
+    .logo-role { font-size: 11px; color: var(--text-dim); margin-top: 4px; font-weight: 500; }
+
+    .avail-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-pill); padding: 8px 16px;
+    }
+    .avail-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
+      box-shadow: 0 0 10px var(--primary); animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .avail-text { font-size: 11px; color: var(--text-dim); font-weight: 600; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 120px 40px 60px;
+    }
+    .hero-content { max-width: 850px; width: 100%; }
+    .hero-eyebrow {
+      font-size: 13px; font-weight: 700; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px;
+    }
+    body.rtl .hero-eyebrow { letter-spacing: 0; }
+    
+    .hero-title {
+      font-size: clamp(32px, 5.5vw, 64px); font-weight: 700; line-height: 1.35; margin-bottom: 24px;
+    }
+    .hero-title br { display: block; }
+    .highlight { color: var(--primary); }
+    
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px); color: var(--text-dim); line-height: 1.65; max-width: 640px; margin-bottom: 36px;
+    }
+    
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--primary); color: #ffffff; padding: 16px 32px;
+      border-radius: var(--r-sm); font-weight: 600; text-decoration: none;
+      font-size: 15px; transition: var(--transition);
+      box-shadow: 0 8px 24px rgba(112, 48, 239, 0.25);
+      cursor: pointer;
+    }
+    .hero-cta:hover {
+      background: var(--primary-hover); transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(112, 48, 239, 0.4);
+    }
+
+    /* ── WORK SECTIONS ── */
+    .work-section { padding: 80px 40px 20px; }
+    .work-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px;
+    }
+    .work-title { font-size: clamp(24px, 3vw, 36px); font-weight: 700; }
+    .work-hint { font-size: 13px; color: var(--text-dim); }
+
+    /* Layout Grids */
+    .col-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+    .col-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
+    
+    .s-col { display: flex; flex-direction: column; gap: 16px; }
+
+    .col-card {
+      background: var(--bg-light); border-radius: var(--r-card); overflow: hidden;
+      border: 1px solid var(--border); transition: var(--transition); position: relative;
+    }
+    .col-card:hover {
+      transform: translateY(-8px); border-color: var(--border-hi);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    }
+
+    .reel { position: relative; width: 100%; background: #000; overflow: hidden; }
+    .reel.vertical { aspect-ratio: 9/16; }
+    .reel.landscape { aspect-ratio: 16/9; }
+    
+    .reel video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reel iframe { width: 100%; height: 100%; border: none; display: block; }
+    
+    .reel-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--surface); }
+    
+    .wave-line { width: 36px; height: 2px; background: var(--text-faint); position: relative; }
+    .wave-line::before, .wave-line::after { content: ''; position: absolute; height: 2px; background: var(--text-faint); }
+    .wave-line::before { width: 22px; top: -8px; left: 0; }
+    .wave-line::after { width: 14px; top: 8px; left: 0; }
+    body.rtl .wave-line::before, body.rtl .wave-line::after { left: auto; right: 0; }
+
+    .reel-badge {
+      position: absolute; bottom: 16px; left: 16px;
+      background: rgba(13, 15, 20, 0.85); backdrop-filter: blur(12px);
+      border: 1px solid var(--border-hi); border-radius: 8px;
+      padding: 6px 12px; font-size: 11px; font-weight: 600; color: #ffffff;
+    }
+    body.rtl .reel-badge { left: auto; right: 16px; }
+
+    .col-info { padding: 4px 2px; }
+    .col-num { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .col-ttl { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+    .col-dsc { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+
+    /* ── ABOUT ── */
+    .about-section { padding: 60px 40px 120px; }
+    .about-card {
+      background: var(--bg-light); border-radius: var(--r-card); padding: 54px;
+      border: 1px solid var(--border); max-width: 740px;
+    }
+    .about-ttl { font-size: clamp(24px, 4vw, 36px); font-weight: 700; margin-bottom: 20px; }
+    .about-body { font-size: 15px; color: var(--text-dim); line-height: 1.75; }
+
+    /* ── FOOTER ── */
+    #contact-target {
+      background: var(--bg-light); border-top: 1px solid var(--border);
+      padding: 54px 40px; display: flex; flex-direction: column; gap: 36px;
+    }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+    .footer-brand { font-size: 28px; font-weight: 700; }
+    
+    .soc-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .soc-link {
+      display: flex; align-items: center; gap: 8px; text-decoration: none;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 11px 20px; font-size: 13px;
+      font-weight: 500; color: var(--text); transition: var(--transition);
+    }
+    .soc-link:hover { transform: translateY(-2px); border-color: var(--primary); background: var(--surface2); }
+
+    .copyright {
+      font-size: 12px; color: var(--text-faint); border-top: 1px solid var(--border);
+      padding-top: 28px; text-align: center;
+    }
+
+    /* ── RESPONSIVE ADAPTABILITY ── */
+    @media (max-width: 1100px) {
+      .col-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .col-grid-2 { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    }
+    @media (max-width: 680px) {
+      header { padding: 14px 20px; }
+      .avail-pill { display: none; }
+      .hero { padding: 110px 20px 40px; }
+      .work-section { padding: 40px 20px; }
+      
+      /* Mobile Layout System Specific Changes */
+      .col-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; } /* 2 side-by-side on mobile */
+      .col-grid-2 { grid-template-columns: 1fr; gap: 32px; }             /* 1 stacked single video on mobile */
+      
+      .about-section { padding: 40px 20px 60px; }
+      .about-card { padding: 28px; }
+      #contact-target { padding: 36px 20px; }
+      .footer-top { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora-bg">
+  <div class="aurora-blob blob-1"></div>
+  <div class="aurora-blob blob-2"></div>
+</div>
+<div class="tech-grid"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo-container">
+    <div class="logo-name">LAQTA</div>
+    <div class="logo-role" id="lang-role">Video Editor · YouTube &amp; Reels</div>
+  </div>
+  <div class="avail-pill">
+    <div class="avail-dot"></div>
+    <div class="avail-text" id="lang-avail">Available for projects</div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="lang-eyebrow">Visual Storytelling Specialist</div>
+    <h1 class="hero-title" id="lang-title">Editing long-form<br/>videos and<br/><span class="highlight">Shorts &amp; Reels.</span></h1>
+    <p class="hero-desc" id="lang-desc">Every frame built with intent. Focused entirely on premium structures, engaging flow, and absolute narrative clarity for both YouTube and short-form platforms.</p>
+    <a onclick="scrollToContact()" class="hero-cta" id="lang-cta">Contact Me</a>
+  </div>
+</section>
+
+<!-- ── SECTION 1: SHORTS & REELS FORMATS (4 Vertical Cards - 2x2 on Mobile) ── -->
+<section class="work-section">
+  <div class="work-head">
+    <div>
+      <h2 class="work-title" id="lang-sec1-title">Shorts &amp; Reels formats</h2>
+    </div>
+    <p class="work-hint">9:16 Vertical Format</p>
+  </div>
+
+  <div class="col-grid-4">
+    <!-- Card 1 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel vertical">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-1">Minimal</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">01</div>
+        <div class="col-ttl" id="ttl-1">Minimal</div>
+        <div class="col-dsc" id="dsc-1">Clean pacing, natural space, and strict focus on narrative rhythm.</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel vertical">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-2">Motion</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">02</div>
+        <div class="col-ttl" id="ttl-2">Motion</div>
+        <div class="col-dsc" id="dsc-2">Kinetic typography, vibrant graphics, and sharp high-energy flow.</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel vertical">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-3">Podcast</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">03</div>
+        <div class="col-ttl" id="ttl-3">Podcast</div>
+        <div class="col-dsc" id="dsc-3">Engaging punchy structures, seamless close-up multi-cam transitions.</div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel vertical">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-4">Documentary</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">04</div>
+        <div class="col-ttl" id="ttl-4">Documentary</div>
+        <div class="col-dsc" id="dsc-4">Cinematic pacing, profound overlays, and immersive atmospheric flow.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: YOUTUBE & LONG FORMATS (2 Wide Cards - Stacked 1 by 1 on Mobile) ── -->
+<section class="work-section" style="padding-top: 10px;">
+  <div class="work-head">
+    <div>
+      <h2 class="work-title" id="lang-sec2-title">YouTube &amp; long formats</h2>
+    </div>
+    <p class="work-hint">16:9 Widescreen Format</p>
+  </div>
+
+  <div class="col-grid-2">
+    <!-- Wide Card 1 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel landscape">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-5">Long Form Edits</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">05</div>
+        <div class="col-ttl" id="ttl-5">Cinematic Storytelling</div>
+        <div class="col-dsc" id="dsc-5">Deep narrative pacing, clear audio design, and long-form visual retention mechanics.</div>
+      </div>
+    </div>
+
+    <!-- Wide Card 2 -->
+    <div class="s-col">
+      <div class="col-card">
+        <div class="reel landscape">
+          <video src="" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+          <div class="reel-ph"><div class="wave-line"></div></div>
+          <div class="reel-badge" id="badge-6">Showcases</div>
+        </div>
+      </div>
+      <div class="col-info">
+        <div class="col-num">06</div>
+        <div class="col-ttl" id="ttl-6">YouTube Production</div>
+        <div class="col-dsc" id="dsc-6">Sleek multi-camera configurations, clear structures, and modern professional timing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-section">
+  <div class="about-card">
+    <h3 class="about-ttl" id="lang-about-ttl">The Core <span class="highlight">Philosophy</span></h3>
+    <p class="about-body" id="lang-about-body">Specialized in producing premium high-engagement YouTube videos alongside vertical short-form content. Edits are crafted strategically to hook viewers instantly, sustain attention, and elevate retention values seamlessly across diverse formats.</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="contact-target">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">LAQTA</div>
+    </div>
+    <div class="soc-links">
+      <a class="soc-link" href="https://wa.me/qr/DVSQSDESCFPTO1" target="_blank">WhatsApp</a>
+      <a class="soc-link" href="https://instagram.com/YOUR_USERNAME" target="_blank">Instagram</a>
+      <a class="soc-link" href="https://www.facebook.com/share/1FtTA3y2CA/" target="_blank">Facebook</a>
+    </div>
+  </div>
+  <div class="copyright">© 2026 · LAQTA · All Rights Reserved</div>
+</footer>
+
+<script>
+  /* ── Bilingual Content Data Map ── */
+  const translations = {
+    en: {
+      role: "Video Editor · YouTube & Reels",
+      avail: "Available for projects",
+      eyebrow: "Visual Storytelling Specialist",
+      title: 'Editing long-form<br/>videos and<br/><span class="highlight">Shorts &amp; Reels.</span>',
+      desc: "Every frame built with intent. Focused entirely on premium structures, engaging flow, and absolute narrative clarity for both YouTube and short-form platforms.",
+      cta: "Contact Me",
+      sec1Title: "Shorts &amp; Reels formats",
+      sec2Title: "YouTube &amp; long formats",
+      aboutTtl: 'The Core <span class="highlight">Philosophy</span>',
+      aboutBody: "Specialized in producing premium high-engagement YouTube videos alongside vertical short-form content. Edits are crafted strategically to hook viewers instantly, sustain attention, and elevate retention values seamlessly across diverse formats.",
+      ttl1: "Minimal", dsc1: "Clean pacing, natural space, and strict focus on narrative rhythm.",
+      ttl2: "Motion", dsc2: "Kinetic typography, vibrant graphics, and sharp high-energy flow.",
+      ttl3: "Podcast", dsc3: "Engaging punchy structures, seamless close-up multi-cam transitions.",
+      ttl4: "Documentary", dsc4: "Cinematic pacing, profound overlays, and immersive atmospheric flow.",
+      ttl5: "Cinematic Storytelling", dsc5: "Deep narrative pacing, clear audio design, and long-form visual retention mechanics.",
+      ttl6: "YouTube Production", dsc6: "Sleek multi-camera configurations, clear structures, and modern professional timing."
+    },
+    ar: {
+      role: "محرر فيديو · يوتيوب ومقاطع ريلز",
+      avail: "متاح للمشاريع والعمل",
+      eyebrow: "متخصص في السرد البصري وصناعة المحتوى",
+      title: 'محرر فيديوهات<br/>طويلة و مقاطع<br/><span class="highlight">Shorts و Reels.</span>',
+      desc: "كل إطار مبني بدقة وهدف واضح. تركيز كامل على الهياكل المميز للمقاطع الطويلة والقصيرة، الإيقاع المتناسق، وسلاسة الحركة.",
+      cta: "تواصل معي",
+      sec1Title: "صيغ الـ Shorts &amp; Reels",
+      sec2Title: "اليوتيوب والمقاطع الطويلة (YouTube &amp; long)",
+      aboutTtl: 'الفلسفة <span class="highlight">الأساسية للمونتاج</span>',
+      aboutBody: "متخصص في إنتاج وتعديل فيديوهات اليوتيوب عالية الجودة والانتشار إلى جانب المحتوى الرأسي المخصص للمقاطع القصيرة. يتم تصميم المونتاج بشكل استراتيجي لجذب المشاهدين ورفع معدلات الاحتفاظ والمشاهدة.",
+      ttl1: "مينيمال (بسيط)", dsc1: "إيقاع هادئ ونظيف، مساحات بصرية مريحة، وتركيز خالص على تسلسل القصة البصرية.",
+      ttl2: "موشن (حركي)", dsc2: "نصوص متحركة مفعمة بالحيوية، رسومات قوية وجريئة، وطاقة بصرية سريعة ومثيرة.",
+      ttl3: "بودكاست", dsc3: "تنسيق ممتع وقوي، انتقال سلس ودقيق بين زوايا الكاميرات المتعددة واللقطات القريبة.",
+      ttl4: "وثائقي", dsc4: "وتيرة سينمائية، تراكيب بصرية عميقة، وتدفق غامر ينقل المشاعر الحقيقية بشكل واقعي.",
+      ttl5: "السرد السينمائي", dsc5: "بناء سردي متماسك، تصميم احترافي للمؤثرات الصوتية والتركيز التام على استبقاء المشاهدين للمقاطع الطويلة.",
+      ttl6: "إنتاج اليوتيوب", dsc6: "إدارة وتنسيق اللقطات المأخوذة من كاميرات متعددة، ترابط الأفكار، وتوقيت بصري محترف."
+    }
+  };
+
+  /* ── Language Engine ── */
+  let currentLang = 'en';
+  const systemLang = navigator.language || navigator.userLanguage;
+  if (systemLang.startsWith('ar')) {
+    currentLang = 'ar';
+    document.body.classList.add('rtl');
+  }
+
+  function applyLanguage() {
+    const t = translations[currentLang];
+    document.getElementById('lang-role').innerText = t.role;
+    document.getElementById('lang-avail').innerText = t.avail;
+    document.getElementById('lang-eyebrow').innerText = t.eyebrow;
+    document.getElementById('lang-title').innerHTML = t.title;
+    document.getElementById('lang-desc').innerText = t.desc;
+    document.getElementById('lang-cta').innerText = t.cta;
+    document.getElementById('lang-sec1-title').innerHTML = t.sec1Title;
+    document.getElementById('lang-sec2-title').innerHTML = t.sec2Title;
+    document.getElementById('lang-about-ttl').innerHTML = t.aboutTtl;
+    document.getElementById('lang-about-body').innerText = t.aboutBody;
+    
+    document.getElementById('badge-1').innerText = document.getElementById('ttl-1').innerText = t.ttl1;
+    document.getElementById('badge-2').innerText = document.getElementById('ttl-2').innerText = t.ttl2;
+    document.getElementById('badge-3').innerText = document.getElementById('ttl-3').innerText = t.ttl3;
+    document.getElementById('badge-4').innerText = document.getElementById('ttl-4').innerText = t.ttl4;
+    document.getElementById('ttl-5').innerText = t.ttl5;
+    document.getElementById('ttl-6').innerText = t.ttl6;
+    
+    document.getElementById('dsc-1').innerText = t.dsc1;
+    document.getElementById('dsc-2').innerText = t.dsc2;
+    document.getElementById('dsc-3').innerText = t.dsc3;
+    document.getElementById('dsc-4').innerText = t.dsc4;
+    document.getElementById('dsc-5').innerText = t.dsc5;
+    document.getElementById('dsc-6').innerText = t.dsc6;
+  }
+
+  function scrollToContact() {
+    document.getElementById('contact-target').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  applyLanguage();
+
+  /* Hide empty source tags */
+  document.querySelectorAll('.reel').forEach(card => {
+    const vid = card.querySelector('video');
+    const ph  = card.querySelector('.reel-ph');
+    if (!vid) return;
+    if (vid.getAttribute('src') && vid.getAttribute('src') !== '') {
+      ph.style.display = 'none';
+    } else {
+      vid.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
